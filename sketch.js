@@ -4,24 +4,25 @@ let scale = 18;
 
 function setup() {
   createCanvas(400, 400);
-  background(0);
+  background(255);
 
   pixelDensity(1);
   webcam = createCapture(VIDEO);
   webcam.size(width / scale, height / scale);
   webcam.hide();
 
-  for (let i = 0; i < 20; i++) {
+  let numStars = int(width * height / 500);
+
+  for (let i = 0; i < numStars; i++) {
     let x = random(width);
     let y = random(height);
-    let size = random(5, 15);
+    let size = random(5, 30);
     let npoints = int(random(5, 10));
     movers.push(new Mover(x, y, size, npoints));
   }
 }
 
 function draw() {
-  background(0, 20);
   webcam.loadPixels();
 
   for (let mover of movers) {
@@ -49,16 +50,19 @@ class Mover {
     let px = int(this.x / scale);
     let py = int(this.y / scale);
 
+    let r = 255;
+    let g = 255;
+    let b = 255;
+    
     if (px >= 0 && px < webcam.width && py >= 0 && py < webcam.height) {
       let pixelIndex = (py * webcam.width + px) * 4;
-      let r = webcam.pixels[pixelIndex];
-      let g = webcam.pixels[pixelIndex + 1];
-      let b = webcam.pixels[pixelIndex + 2];
-      fill(r, g, b);
-    } else {
-      fill(255);
+      r = webcam.pixels[pixelIndex];
+      g = webcam.pixels[pixelIndex + 1];
+      b = webcam.pixels[pixelIndex + 2];
     }
 
+
+    fill(r, g, b, 100);
     noStroke();
     push();
     translate(this.x, this.y);
